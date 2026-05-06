@@ -1,7 +1,7 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { IconButton } from "@mui/material";
+import axios from "axios";
 import {
-  PersonAdd,
   Person,
   Mail,
   Phone,
@@ -9,10 +9,11 @@ import {
   Visibility,
   VisibilityOff,
 } from "@mui/icons-material";
-
+import { ToastContainer, toast } from 'react-toastify';
+import Header from "./Header.jsx";
+import Footer from "./Footer.jsx";
 export default function Signuppage() {
   const [showPassword, setShowPassword] = useState(false);
-
   const [form, setForm] = useState({
     fullName: "",
     email: "",
@@ -21,200 +22,291 @@ export default function Signuppage() {
     terms: false,
   });
 
-  const containerClass = useMemo(
-    () =>
-      [
-        "font-sans",
-        "min-h-screen flex items-center justify-center p-6",
-        "bg-[#f8f6f6] text-slate-900",
-       
-      ].join(" "),
-    []
-  );
+  const handleChange = (event) => {
+    const { name, value, type, checked } = event.target;
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setForm((prev) => ({
-      ...prev,
+    setForm((previousForm) => ({
+      ...previousForm,
       [name]: type === "checkbox" ? checked : value,
     }));
   };
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    // TODO: connect API / validation
-    console.log("Register submit:", form);
+  const handleSubmit =  async (event) => {
+    event.preventDefault();
+   try{
+ console.log("Register submit:", form);
+
+    const reponse  = await axios.post("http://localhost:5000/auth/register", {
+      name: form.fullName,
+      email: form.email,
+      password: form.password,
+      phonenumber: form.phone,
+      privacy: form.terms
+    });
+
+    console.log("Server response:", reponse.data);
+    toast.success(" User registered successfully!");
+
+    setTimeout(() => {
+      window.location.href = "/login";
+    }, 2000);
+   }catch(error) {
+    console.error("Registration error:", error.response ? error.response.data : error.message);
+    toast.error(error.response.data.message || "Registration failed!");
+    setTimeout(() => {
+      window.location.href = "/login";
+    }, 2000);
+   }
   };
 
+  const handleGoogleSignup = () => {
+    window.open("http://localhost:5000/auth/google", "_self");
+  };
+
+  const inputClassName =
+    "w-full rounded-2xl border border-zinc-300 bg-white px-4 py-3 text-sm text-black outline-none transition focus:border-black";
+
+  const iconClassName =
+    "pointer-events-none absolute left-8 top-1/2 -translate-y-1/2 text-zinc-500";
+
   return (
-    <div className={containerClass}>
-      {/* Background blobs */}
-      <div className="fixed top-0 left-0 w-full h-full -z-10 opacity-40">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#ea2a33]/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#ea2a33]/10 rounded-full blur-[120px]" />
-      </div>
+    <div className="portfolio-shell min-h-screen">
+      <Header />
+    <section className="px-4 py-10 text-black sm:px-6 lg:px-8">
+      <div className="mx-auto flex min-h-[calc(100vh-10rem)] max-w-6xl items-center justify-center">
+        <div className="grid w-full overflow-hidden rounded-[32px] border border-black bg-white shadow-[0_20px_60px_rgba(0,0,0,0.08)] lg:grid-cols-[0.95fr_1.05fr]">
+          <div className="bg-[#f7f7f7] p-6 sm:p-8 lg:p-10">
+            <div className="mx-auto max-w-md">
+              <div className="mb-8">
+                <p className="portfolio-mono text-xs font-medium uppercase tracking-[0.3em] text-zinc-500">
+                  Sign Up
+                </p>
+                <h1 className="mt-3 text-3xl font-extrabold text-black">
+                  Create your account
+                </h1>
+                <p className="portfolio-mono mt-2 text-sm text-zinc-600">
+                  Fill in your details to get started with a simple account setup.
+                </p>
+              </div>
 
-      <main className="w-full max-w-lg">
-        <div className="bg-white/80 dark:bg-white/5 backdrop-blur-xl border border-[#ea2a33]/10 rounded-2xl shadow-2xl p-8 md:p-4 md:px-6">
-          {/* Header */}
-          <div className="mb-4 text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-[#ea2a33] rounded-2xl mb-2 shadow-lg shadow-[#ea2a33]/30">
-              <PersonAdd className="text-white" style={{ fontSize: 34 }} />
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <button
+                  type="button"
+                  onClick={handleGoogleSignup}
+                  className="flex w-full items-center justify-center gap-3 border border-[#222222] bg-white px-4 py-3 text-sm font-medium text-[#3c4043] shadow-sm transition hover:bg-zinc-50"
+                >
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 48 48"
+                      className="h-5 w-5"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fill="#FFC107"
+                        d="M43.611 20.083H42V20H24v8h11.303C33.654 32.657 29.193 36 24 36c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.959 3.041l5.657-5.657C34.046 6.053 29.27 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"
+                      />
+                      <path
+                        fill="#FF3D00"
+                        d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.959 3.041l5.657-5.657C34.046 6.053 29.27 4 24 4c-7.682 0-14.347 4.337-17.694 10.691z"
+                      />
+                      <path
+                        fill="#4CAF50"
+                        d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.145 35.091 26.715 36 24 36c-5.173 0-9.625-3.33-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"
+                      />
+                      <path
+                        fill="#1976D2"
+                        d="M43.611 20.083H42V20H24v8h11.303a12.05 12.05 0 0 1-4.084 5.571h.003l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"
+                      />
+                    </svg>
+                  </span>
+                  Continue with Google
+                </button>
+
+                <div className="flex items-center gap-3">
+                  <div className="h-px flex-1 bg-zinc-200" />
+                  <span className="portfolio-mono text-xs font-medium uppercase tracking-[0.2em] text-zinc-500">
+                    or
+                  </span>
+                  <div className="h-px flex-1 bg-zinc-200" />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="signup-fullname"
+                    className="portfolio-mono mb-2 block text-xs font-medium uppercase tracking-[0.16em] text-zinc-700"
+                  >
+                    Full Name
+                  </label>
+                  <div className="relative">
+                    <Person fontSize="small" className={iconClassName} />
+                    <input
+                      id="signup-fullname"
+                      name="fullName"
+                      type="text"
+                      placeholder="John Doe"
+                      value={form.fullName}
+                      onChange={handleChange}
+                      className={`${inputClassName} pl-11`}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="signup-email"
+                    className="portfolio-mono mb-2 block text-xs font-medium uppercase tracking-[0.16em] text-zinc-700"
+                  >
+                    Email Address
+                  </label>
+                  <div className="relative">
+                    <Mail fontSize="small" className={iconClassName} />
+                    <input
+                      id="signup-email"
+                      name="email"
+                      type="email"
+                      placeholder="name@example.com"
+                      value={form.email}
+                      onChange={handleChange}
+                      className={`${inputClassName} pl-11`}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="signup-phone"
+                    className="portfolio-mono mb-2 block text-xs font-medium uppercase tracking-[0.16em] text-zinc-700"
+                  >
+                    Phone Number
+                  </label>
+                  <div className="relative">
+                    <Phone fontSize="small" className={iconClassName} />
+                    <input
+                      id="signup-phone"
+                      name="phone"
+                      type="tel"
+                      placeholder="+91 98765 43210"
+                      value={form.phone}
+                      onChange={handleChange}
+                      className={`${inputClassName} pl-11`}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="signup-password"
+                    className="portfolio-mono mb-2 block text-xs font-medium uppercase tracking-[0.16em] text-zinc-700"
+                  >
+                    Password
+                  </label>
+                  <div className="relative">
+                    <Lock fontSize="small" className={iconClassName} />
+                    <input
+                      id="signup-password"
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Create a strong password"
+                      value={form.password}
+                      onChange={handleChange}
+                      className={`${inputClassName} pl-11 pr-12`}
+                      minLength={8}
+                      required
+                    />
+
+                    <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                      <IconButton
+                        size="small"
+                        onClick={() => setShowPassword((value) => !value)}
+                        aria-label="toggle password visibility"
+                      >
+                        {showPassword ? (
+                          <VisibilityOff fontSize="small" className="text-zinc-700" />
+                        ) : (
+                          <Visibility fontSize="small" className="text-zinc-700" />
+                        )}
+                      </IconButton>
+                    </div>
+                  </div>
+                  <p className="portfolio-mono mt-2 text-xs uppercase tracking-[0.1em] text-zinc-500">
+                    Use at least 8 characters for better security.
+                  </p>
+                </div>
+
+                <label className="portfolio-mono flex items-start gap-3 text-xs uppercase tracking-[0.1em] leading-6 text-zinc-700">
+                  <input
+                    type="checkbox"
+                    name="terms"
+                    checked={form.terms}
+                    onChange={handleChange}
+                    className="mt-1 h-4 w-4 rounded border-zinc-400 text-black focus:ring-black"
+                    required
+                  />
+                  <span>
+                    I agree to the{" "}
+                    <a href="#" className="font-medium text-black hover:underline">
+                      Terms and Conditions
+                    </a>{" "}
+                    and{" "}
+                    <a href="#" className="font-medium text-black hover:underline">
+                      Privacy Policy
+                    </a>
+                    .
+                  </span>
+                </label>
+
+                <button type="submit" className="portfolio-btn portfolio-btn-primary w-full justify-center !border-black !py-4">
+                  Create Account
+                </button>
+              </form>
+
+              <p className="portfolio-mono mt-8 text-center text-xs uppercase tracking-[0.12em] text-zinc-600">
+                Already have an account?{" "}
+                <a href="/login" className="font-semibold text-black hover:underline">
+                  Log in
+                </a>
+              </p>
             </div>
-
-            <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white mb-2">
-              Create an Account
-            </h1>
           </div>
 
-          {/* Form */}
-          <form onSubmit={onSubmit} className="space-y-6">
-            {/* Full Name */}
+          <div className="flex flex-col justify-between bg-[#0f0f0f] p-8 text-white sm:p-10">
             <div>
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                Full Name
-              </label>
-              <div className="relative">
-                <Person className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input
-                  className="w-full pl-12 pr-4 py-3.5 bg-[#f8f6f6] dark:bg-slate-800/50 border-none rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ea2a33] transition-all duration-200"
-                  name="fullName"
-                  value={form.fullName}
-                  onChange={handleChange}
-                  placeholder="John Doe"
-                  required
-                  type="text"
-                />
-              </div>
-            </div>
-
-            {/* Email */}
-              <div style={{marginTop:'12px'}}>
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                Email Address
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input
-                  className="w-full pl-12 pr-4 py-3.5 bg-[#f8f6f6] dark:bg-slate-800/50 border-none rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ea2a33] transition-all duration-200"
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  placeholder="john@example.com"
-                  required
-                  type="email"
-                />
-              </div>
-            </div>
-
-            {/* Phone */}
-               <div style={{marginTop:'12px'}}>
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                Phone Number
-              </label>
-              <div className="relative">
-                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input
-                  className="w-full pl-12 pr-4 py-3.5 bg-[#f8f6f6] dark:bg-slate-800/50 border-none rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ea2a33] transition-all duration-200"
-                  name="phone"
-                  value={form.phone}
-                  onChange={handleChange}
-                  placeholder="+1 (555) 000-0000"
-                  required
-                  type="tel"
-                />
-              </div>
-            </div>
-
-            {/* Password */}
-            <div style={{marginTop:'12px'}}>
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                Password
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input
-                  className="w-full pl-12 pr-12 py-3.5 bg-[#f8f6f6] dark:bg-slate-800/50 border-none rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ea2a33] transition-all duration-200"
-                  name="password"
-                  value={form.password}
-                  onChange={handleChange}
-                  placeholder="••••••••"
-                  required
-                  type={showPassword ? "text" : "password"}
-                  minLength={8}
-                />
-
-                <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <IconButton
-                    size="small"
-                    onClick={() => setShowPassword((v) => !v)}
-                    aria-label="toggle password visibility"
-                  >
-                    {showPassword ? (
-                      <VisibilityOff className="text-slate-400 hover:text-[#ea2a33] transition" />
-                    ) : (
-                      <Visibility className="text-slate-400 hover:text-[#ea2a33] transition" />
-                    )}
-                  </IconButton>
-                </div>
-              </div>
-
-              <p className="mt-2 text-xs text-slate-500">
-                Minimum 8 characters with letters and numbers
+              <p className="portfolio-mono mb-4 text-xs uppercase tracking-[0.35em] text-[#00ff88]">
+                New Here
+              </p>
+              <h2 className="max-w-sm text-4xl font-extrabold leading-tight sm:text-5xl">
+                Build your account inside the same portfolio-inspired theme.
+              </h2>
+              <p className="portfolio-mono mt-6 max-w-md text-sm leading-7 text-[#7a7a7a] sm:text-base">
+                A clean signup experience with bold type, structured spacing,
+                and easier backend integration.
               </p>
             </div>
 
-            {/* Terms */}
-            <div className="flex items-start">
-              <div className="flex items-center h-5">
-                <input
-                  className="h-5 w-5 rounded border-[#ea2a33]/20 text-[#ea2a33] focus:ring-[#ea2a33] bg-[#f8f6f6] dark:bg-slate-800 cursor-pointer"
-                  name="terms"
-                  checked={form.terms}
-                  onChange={handleChange}
-                  required
-                  type="checkbox"
-                />
+            <div className="mt-10 grid gap-4 sm:grid-cols-3">
+              <div className="border border-[#222222] bg-[#161616] p-4">
+                <p className="text-2xl font-semibold">01</p>
+                <p className="portfolio-mono mt-2 text-xs uppercase tracking-[0.1em] text-zinc-300">Enter your basic details</p>
               </div>
-              <div className="ml-3 text-sm">
-                <label className="font-medium text-slate-600 dark:text-slate-400">
-                  I agree to the{" "}
-                  <a className="text-[#ea2a33] hover:underline" href="#">
-                    Terms and Conditions
-                  </a>{" "}
-                  and{" "}
-                  <a className="text-[#ea2a33] hover:underline" href="#">
-                    Privacy Policy
-                  </a>
-                  .
-                </label>
+              <div className="border border-[#222222] bg-[#161616] p-4">
+                <p className="text-2xl font-semibold">02</p>
+                <p className="portfolio-mono mt-2 text-xs uppercase tracking-[0.1em] text-zinc-300">Choose a secure password</p>
+              </div>
+              <div className="border border-[#222222] bg-[#161616] p-4">
+                <p className="text-2xl font-semibold">03</p>
+                <p className="portfolio-mono mt-2 text-xs uppercase tracking-[0.1em] text-zinc-300">Accept terms and continue</p>
               </div>
             </div>
-
-            {/* Submit */}
-            <button
-              className="w-full bg-[#ea2a33] hover:bg-[#ea2a33]/90 text-white font-bold py-4 rounded-xl shadow-lg shadow-[#ea2a33]/20 transition-all duration-200 transform hover:scale-[1.01] active:scale-[0.99]"
-              type="submit"
-            >
-              Create Account
-            </button>
-          </form>
-
-          {/* Footer */}
-          <div className=" pt-4 border-t border-slate-200 dark:border-slate-800 text-center">
-            <p className="text-slate-600 dark:text-slate-400">
-              Already have an account?{" "}
-              <a
-                className="text-[#ea2a33] font-semibold hover:underline decoration-2 underline-offset-4"
-                href="/login"
-              >
-                Log in
-              </a>
-            </p>
           </div>
         </div>
-
-      </main>
+      </div>
+    </section>
+      <Footer />
+      <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
     </div>
   );
 }

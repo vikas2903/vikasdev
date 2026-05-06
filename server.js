@@ -4,12 +4,37 @@ import path from 'path';
 import { Server } from 'socket.io';
 import cors from 'cors';
 import http from "http";
+import connectToDatabase from './database/connect.js';
 
-const app = express();
+import session from "express-session";
+import passport from "passport";
+import "./config/passport.js";
+import router from "./route/auth.js";
+import googleAuthRoutes from "./route/googleauth.js";
+
 dotenv.config();
-app.use(cors());
-const server = http.createServer(app);
+const app = express();
 
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+}));
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use("/auth", router);
+const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: "*",
@@ -19,6 +44,7 @@ const io = new Server(server, {
 
 
 app.use(express.static(path.join(path.resolve(), 'public')));
+app.use("/auth", googleAuthRoutes);
 
 // socket io connection
 io.on("connection", (socket) => {
@@ -36,11 +62,18 @@ io.on("connection", (socket) => {
   });
 });
 
+// Database connection
+connectToDatabase();
+
 app.get('/', (req, res) => {
-  res.sendFile(path.join(path.resolve(), 'assets', 'chatboat.html'));
+
+  // This is a code snippet for serving a static HTML file.
+  // res.sendFile(path.join(path.resolve(), 'assets', 'index.html'));
+
+  res.json({ message: "Welcome to the chat server!" });
 });
 
-const PORT = 3000;
+const PORT = 5000;
 server.listen(PORT, () => {
   console.log(`http://localhost:${PORT}`);
 });

@@ -23,62 +23,71 @@
             --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
         }
 
-        [data-theme="dark"] {
-            --bg-color: #0f172a;
-            --chat-bg: #1e293b;
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --bot-message-bg: #334155;
-            --user-message-bg: #6366f1;
-            --border-color: #334155;
-        }
+            #chatbot_toggle {
+                position: fixed;
+                right: 15px;
+                bottom: 10px;
+                border: none;
+                height: 65px;
+                width: 65px;
+                background: #6f63f3;
+                padding: 14px;
+                color: white; 
+                border-radius: 50%;
+            }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family:
-                "Inter",
-                -apple-system,
-                BlinkMacSystemFont,
-                sans-serif;
-        }
+            [data-theme="dark"] {
+                --bg-color: #0f172a;
+                --chat-bg: #1e293b;
+                --text-primary: #f1f5f9;
+                --text-secondary: #94a3b8;
+                --bot-message-bg: #334155;
+                --user-message-bg: #6366f1;
+                --border-color: #334155;
+            }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-            min-height: 100vh;
-        }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .header {
+        .header_custom {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem;
-            background-color: var(--bg-color);
+            padding: .5rem;
+            background-color: #6f63f3;
+            color: #fff;
             border-bottom: 1px solid var(--border-color);
             box-shadow: var(--shadow-sm);
+
+
+        }
+         .container_custom {
+            max-width: 450px;
+            min-width: 450px;
+            margin: 0 auto;
+            height: 100%;
+            max-height: 650px;
+            display: none;
+            flex-direction: column;
+            position: fixed;
+            bottom: 30px;
+            right: 20px;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+             transition: all .2s ease;
         }
 
-        .header-title {
+
+        .header-title_custom {
             display: flex;
             align-items: center;
             gap: 1rem;
         }
 
-        .header-title h1 {
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
+      .header-title_custom h1 {
+        font-size: 20px;
+        font-family: cursive;
+        line-height: normal;
+        vertical-align: bottom;
+        margin: 0;
+    }
 
         .bot-status {
             display: flex;
@@ -113,10 +122,7 @@
             }
         }
 
-        .controls {
-            display: flex;
-            gap: 1rem;
-        }
+
 
         .theme-toggle {
             background: none;
@@ -129,10 +135,7 @@
             transition: all 0.3s ease;
         }
 
-        .theme-toggle:hover {
-            background-color: var(--bot-message-bg);
-        }
-
+     
         .chat-container {
             flex: 1;
             overflow-y: auto;
@@ -262,6 +265,69 @@
             color: var(--text-secondary);
         }
 
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        .product-card {
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            overflow: hidden;
+            background: var(--bg-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .product-card-image {
+            width: 100%;
+            height: 170px;
+            object-fit: cover;
+            display: block;
+            background: #e2e8f0;
+        }
+
+        .product-card-body {
+            padding: 0.95rem;
+        }
+
+        .product-card-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+
+        .product-card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-bottom: 0.65rem;
+        }
+
+        .product-chip {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 999px;
+            background: var(--bot-message-bg);
+            color: var(--text-secondary);
+        }
+
+        .product-card-price {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+
+        .product-card-desc {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
         .bot-message .message-bubble {
             background-color: var(--bot-message-bg);
             border-top-left-radius: 0;
@@ -328,7 +394,7 @@
         }
 
         .input-container {
-            padding: 1.5rem;
+            padding: .5rem;
             background-color: var(--bg-color);
             border-top: 1px solid var(--border-color);
             box-shadow: var(--shadow-lg);
@@ -338,9 +404,10 @@
             display: flex;
             gap: 1rem;
             background-color: var(--chat-bg);
-            border-radius: 1rem;
+        
             padding: 0.5rem;
             box-shadow: var(--shadow-sm);
+            width: 100%;
         }
 
         .message-input {
@@ -363,7 +430,6 @@
         .action-buttons {
             display: flex;
             gap: 0.5rem;
-            padding: 0.5rem;
         }
 
         .action-button {
@@ -400,14 +466,63 @@
             transform: translateY(-1px);
         }
 
+        .container_custom.active_ai_body {
+            align-items: stretch;
+            display: block;
+            height: 600px;
+            background: #eee;
+            width: auto;
+            justify-content: space-between;
+            display: flex;
+            z-index: 99;
+        }
+        button.theme-toggle i{
+            color:#fff;
+            font-size: 14px;
+        }
         @media (max-width: 768px) {
-            .container {
-                height: 100dvh;
+
+            .container_custom.active_ai_body {
+                align-items: stretch;
+                display: block;
+                height: 99vh;
+                background: #eee;
+                width: auto;
+                justify-content: space-between;
+                display: flex;
+                position: relative;
+                z-index: 99;
             }
 
-            .header-title h1 {
-                font-size: 1.25rem;
+            .container_custom {
+                max-width: 98%;
+                min-width: 98%;
+                width: 95%;
+                max-height: 100%;
+                position: fixed;
+                bottom: 6px;
+                margin-right: 0;
+                right: 0;
+                display: none;
+                height: 0;
+                transition: all .2s ease;
             }
+
+            .input-wrapper {
+                display: flex;
+                gap: .5rem;
+                background-color: var(--chat-bg);
+                
+                padding: 0.5rem;
+                box-shadow: var(--shadow-sm);
+                width: 100%;
+            }
+
+            .send-button {
+                padding: 0.65rem .95rem;
+            }
+
+           
 
             .chat-container {
                 padding: 1rem;
@@ -418,25 +533,25 @@
             }
 
             .input-container {
-                padding: 1rem;
+                padding: .5rem;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <header class="header">
-            <div class="header-title">
-                <h1>Vikas's Assistant</h1>
-                <div class="bot-status">
+    <div class="container_custom">
+        <header class="header_custom">
+            <div class="header-title_custom">
+                <h1>🤖 Digi</h1>
+                <!-- <div class="bot-status">
                     <div class="status-indicator"></div>
                     <span>Online</span>
-                </div>
+                </div> -->
             </div>
             <div class="controls">
                 <button class="theme-toggle" aria-label="Toggle theme">
-                    <i class="fas fa-moon"></i>
+             <i class="fa-solid fa-x"></i>
                 </button>
             </div>
         </header>
@@ -458,25 +573,60 @@
                 <input type="text" class="message-input" placeholder="Type your message..."
                     aria-label="Message input" />
                 <div class="action-buttons">
-                    <button class="action-button" aria-label="Add attachment">
+                    <!-- <button class="action-button" aria-label="Add attachment">
                         <i class="fas fa-paperclip"></i>
-                    </button>
-                    <button class="action-button" aria-label="Voice input">
+                    </button> -->
+                    <!-- <button class="action-button" aria-label="Voice input">
                         <i class="fas fa-microphone"></i>
-                    </button>
+                    </button> -->
                     <button class="send-button">
-                        <span>Send</span>
                         <i class="fas fa-paper-plane"></i>
                     </button>
                 </div>
             </div>
         </div>
     </div>
+
+    <button id="chatbot_toggle">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="">
+            <path d="M0 0h24v24H0V0z" fill="none"></path>
+            <path
+                d="M15 4v7H5.17l-.59.59-.58.58V4h11m1-2H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm5 4h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1z">
+            </path>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
+            <path d="M0 0h24v24H0V0z" fill="none"></path>
+            <path
+                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z">
+            </path>
+        </svg>
+    </button>
 </body>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
+
+
+
     document.addEventListener("DOMContentLoaded", function () {
+
+
+        const toggleBtn = document.querySelector("#chatbot_toggle");
+        const chatBody = document.querySelector(".container_custom");
+        const themeToggleBtn = document.querySelector(".theme-toggle");
+
+        if (toggleBtn && chatBody) {
+            toggleBtn.addEventListener('click', () => {
+                chatBody.classList.toggle("active_ai_body");
+            });
+        }
+
+        if(themeToggleBtn){
+            themeToggleBtn.addEventListener('click', () => {
+                chatBody.classList.remove("active_ai_body");
+               
+            });
+        }
 
         let backendUrl = "/agent?message=";
         let input = document.querySelector(".message-input");
@@ -621,13 +771,38 @@
             return formatAssistantMessage(message);
         };
 
-        const appendMessage = (message, type) => {
-            let avatar = type === "user" ? "U" : "B";
+        const renderRecommendationCards = (cards = []) => {
+            if (!cards.length) {
+                return "";
+            }
+
+            const cardsHtml = cards.map((card) => `
+                <div class="product-card">
+                    <img class="product-card-image" src="${escapeHtml(card.image || "")}" alt="${escapeHtml(card.title || "Product image")}" />
+                    <div class="product-card-body">
+                        <div class="product-card-title">${escapeHtml(card.title || "")}</div>
+                        <div class="product-card-meta">
+                            <span class="product-chip">${escapeHtml(card.brand || "")}</span>
+                            <span class="product-chip">${escapeHtml(card.category || "")}</span>
+                            <span class="product-chip">Rating ${escapeHtml(String(card.rating ?? ""))}</span>
+                            <span class="product-chip">Stock ${escapeHtml(String(card.stock ?? ""))}</span>
+                        </div>
+                        <div class="product-card-price">$${escapeHtml(String(card.price ?? ""))}</div>
+                        <div class="product-card-desc">${escapeHtml(card.description || "")}</div>
+                    </div>
+                </div>
+            `).join("");
+
+            return `<div class="product-grid">${cardsHtml}</div>`;
+        };
+
+        const appendMessage = (message, type, cards = []) => {
+            let avatar = type === "user" ? "👤" : "🤖";
             let messageHtml = `
                 <div class="message ${type}-message">
                     <div class="avatar">${avatar}</div>
                     <div class="message-bubble">
-                        <div class="message-content">${formatMessage(message, type)}</div>
+                        <div class="message-content">${formatMessage(message, type)}${type === "bot" ? renderRecommendationCards(cards) : ""}</div>
                     </div>
                 </div>
             `;
@@ -662,7 +837,7 @@
 
             try {
                 const data = await userMessageSendToBackend(message);
-                appendMessage(data.response || "No response received from backend.", "bot");
+                appendMessage(data.response || "No response received from backend.", "bot", data.recommendations || []);
             } catch (error) {
                 console.error("Error sending message to backend:", error);
                 appendMessage("Unable to connect to the backend. Please check if the server is running on http://localhost:3000.", "bot");
