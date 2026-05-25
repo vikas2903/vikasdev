@@ -10,6 +10,7 @@ import UpdateProfilePage from "./components/UpdateProfilePage.jsx";
 import Chatpage from "./components/Chatpage.jsx";
 import Cartdrawer1 from "./components/Cartdrawer1.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Productpage from "./components/Productpage.jsx";
 
 function App() {
 
@@ -17,7 +18,8 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-            <Route path="/" element={<Homepage />} />
+            {/* <Route path="/" element={<Homepage />} /> */}
+            <Route path="/" element={<Productpage />} />
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/chat" element={<Chatpage />} />
             <Route path="/login" element={<Loginpage />} />
