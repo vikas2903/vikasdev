@@ -11,6 +11,8 @@ import Chatpage from "./components/Chatpage.jsx";
 import Cartdrawer1 from "./components/Cartdrawer1.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Productpage from "./components/Productpage.jsx";
+import GoogleKeepClone from "./components/googlekeepclone.jsx";
+import ImageUpload from "./components/imageupload.jsx";
 
 function App() {
 
@@ -29,6 +31,8 @@ function App() {
             <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/update-profile" element={<UpdateProfilePage />} />
             <Route path="/cartdrawer1" element={<Cartdrawer1 open={true} onClose={() => {}} />}/>
+            <Route path="/google-keep" element={<GoogleKeepClone />} />
+            <Route path="/image-upload" element={<ImageUpload />} />
         </Routes>
       </BrowserRouter>
 

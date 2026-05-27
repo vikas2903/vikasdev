@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-const TRY_ON_API_URL = "http://localhost:4004/try-on";
+const TRY_ON_API_URL = "http://localhost:3002/api/tryon";
 
 const products = [
   {
@@ -28,7 +28,7 @@ const products = [
       { name: "Olive Gold", value: "#9b9460" },
     ],
     image:
-      "https://www.prisachi.com/cdn/shop/files/C9E53261-BCA7-4B32-A324-567C11D5C591.jpg?auto=format&fit=crop&w=900&q=80",
+      "https://mystella.in/cdn/shop/files/20260116_1255_Image_Generation_remix_01kf2v2bbefjbt5m6xk7a0wte9.png?v=1768628942?auto=format&fit=crop&w=900&q=80",
     garmentDescription: "women floral anarkali kurta",
     accent: "#b65f47",
     panelBackground: "linear-gradient(180deg, #f8e3db 0%, #f2d4c7 100%)",
@@ -161,13 +161,10 @@ const Productpage = () => {
 
     try {
       const formData = new FormData();
-      formData.append("image", file);
-      formData.append("productName", product.name);
-      formData.append("clothImage", product.image);
+      formData.append("userImage", file);
+      formData.append("garmentImageUrl", product.image);
       formData.append("garmentDescription", product.garmentDescription);
       formData.append("garmentType", product.garmentType);
-      formData.append("gender", product.gender);
-      formData.append("category", product.category);
 
       const response = await fetch(TRY_ON_API_URL, {
         method: "POST",
@@ -180,12 +177,12 @@ const Productpage = () => {
         throw new Error(data.message || data.error || "Try-on failed");
       }
 
-      if (!data.outputUrl) {
+      if (!data.image) {
         throw new Error("No try-on image returned from API");
       }
 
-      setTryOnImage(data.outputUrl);
-      setMaskedImage(data.maskedImageUrl || "");
+      setTryOnImage(data.image);
+      setMaskedImage("");
     } catch (error) {
       console.error("Try on error:", error);
       setErrorMessage(error.message || "Unable to generate try-on image");

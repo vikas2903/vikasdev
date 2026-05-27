@@ -6,8 +6,6 @@ import Cartdrawer from "./Cartdrawer.jsx";
 const socket = io("http://localhost:3000");
 
 function Chatpage() {
-    
-
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState([]);
 
@@ -22,16 +20,14 @@ function Chatpage() {
 
         setMessage("");
     };
-    console.log(messages)
     useEffect(() => {
-
-
         socket.on("receive_message", (data) => {
-
-
             setMessages((prev) => [...prev, data]);
         });
 
+        return () => {
+            socket.off("receive_message");
+        };
     }, []);
 
     return (
@@ -95,8 +91,17 @@ function Chatpage() {
                             <div className="prof" style={{ backgroundColor: '#ff7b54' }}><p>J</p></div>
                         </div>
 
-                   
-                 
+                        {messages.map((chatMessage, index) => (
+                            <div className="message mMess" key={`${chatMessage.time}-${index}`}>
+                                <div className="messArea">
+                                    <p id="sname">Live Message</p>
+                                    <div className="textM">{chatMessage.text}</div>
+                                </div>
+                                <div className="prof" style={{ backgroundColor: '#ff7b54' }}>
+                                    <p>{chatMessage.text?.[0]?.toUpperCase() || "M"}</p>
+                                </div>
+                            </div>
+                        ))}
 
                     </div>
 
@@ -104,8 +109,26 @@ function Chatpage() {
                         <button id="genMeetLink" className=" button-s1" tooltip="Google Docs" flow="right"><a href="https://docs.google.com/document/u/0/create" target="blank"><span className="material-icons">description</span></a></button>
                         <button id="genMeetLink" className=" button-s1" tooltip="Google Meet" flow="right"><a href="https://meet.google.com/new" target="blank"><span className="material-icons">video_call</span></a></button>
                         <button id="linkCopy" className="button-s1" tooltip="Copy Link" flow="up"><span className="material-icons">link</span></button>
-                        <div className="textA"><textarea id="message" name="message" rows="1" cols="30" placeholder="Type your message here"></textarea></div>
-                        <button id="send" className="button-s1" tooltip="Send" flow="left"><span className="material-icons headerIcon">send</span></button>
+                        <div className="textA">
+                            <textarea
+                                id="message"
+                                name="message"
+                                rows="1"
+                                cols="30"
+                                placeholder="Type your message here"
+                                value={message}
+                                onChange={(event) => setMessage(event.target.value)}
+                            ></textarea>
+                        </div>
+                        <button
+                            id="send"
+                            className="button-s1"
+                            tooltip="Send"
+                            flow="left"
+                            onClick={sendMessage}
+                        >
+                            <span className="material-icons headerIcon">send</span>
+                        </button>
                     </div>
                     <div id="goToDown" className="downDowny"><span className="material-icons" >arrow_downward</span></div>
                 </div>
